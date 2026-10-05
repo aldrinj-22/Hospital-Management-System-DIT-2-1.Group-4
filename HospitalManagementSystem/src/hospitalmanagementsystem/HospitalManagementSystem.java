@@ -32,6 +32,11 @@ public class HospitalManagementSystem extends JFrame {
         btnPatients = new JButton("Patient Management");
         btnPatients.setBounds(130, 100, 240, 40);
         add(btnPatients);
+        
+        btnPatients.addActionListener(e -> {
+        PatientManagement patientWindow = new PatientManagement();
+        patientWindow.setVisible(true);
+        });
 
         btnDoctors = new JButton("Doctor Management");
         btnDoctors.setBounds(130, 160, 240, 40);

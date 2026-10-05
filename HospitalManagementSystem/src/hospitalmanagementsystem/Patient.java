@@ -11,4 +11,15 @@ package hospitalmanagementsystem;
  */
 public class Patient {
     
+      int id;
+    String name;
+    int age;
+    String medicalHistory;
+
+    public Patient(int id, String name, int age, String medicalHistory) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.medicalHistory = medicalHistory;
+    }
 }
