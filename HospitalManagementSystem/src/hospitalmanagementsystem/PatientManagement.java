@@ -5,12 +5,17 @@ package hospitalmanagementsystem;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import javax.swing.*;
+import java.util.ArrayList;
+
 /**
  *
  * @author admin
  */
 public class PatientManagement extends JFrame {
-
+    
+   ArrayList<Patient> patients = new ArrayList<>();
+ 
+ 
     JLabel lblId;
     JLabel lblName;
     JLabel lblAge;
@@ -33,7 +38,7 @@ public class PatientManagement extends JFrame {
 
         setTitle("Patient Management");
         setSize(600, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
 
@@ -76,6 +81,7 @@ public class PatientManagement extends JFrame {
         btnAdd = new JButton("Add");
         btnAdd.setBounds(50, 250, 100, 35);
         add(btnAdd);
+        
 
         btnUpdate = new JButton("Update");
         btnUpdate.setBounds(160, 250, 100, 35);
@@ -100,28 +106,47 @@ public class PatientManagement extends JFrame {
         btnBack.setBounds(200, 490, 150, 35);
         add(btnBack);
 
+        
         btnAdd.addActionListener(e -> {
 
-            String id = txtId.getText();
-            String name = txtName.getText();
-            String age = txtAge.getText();
-            String history = txtHistory.getText();
+         if (txtId.getText().trim().isEmpty() ||
+         txtName.getText().trim().isEmpty() ||
+         txtAge.getText().trim().isEmpty() ||
+         txtHistory.getText().trim().isEmpty()) {
 
-            display.append(
-                "ID: " + id +
-                " | Name: " + name +
-                " | Age: " + age +
-                " | History: " + history + "\n"
-            );
+         JOptionPane.showMessageDialog(this,
+            "Please fill in all information!",
+            "Input Error",
+            JOptionPane.ERROR_MESSAGE);
 
-            txtId.setText("");
-            txtName.setText("");
-            txtAge.setText("");
-            txtHistory.setText("");
-        });
+         return;
+       }
+
+      int id = Integer.parseInt(txtId.getText());
+      String name = txtName.getText();
+      int age = Integer.parseInt(txtAge.getText());
+      String history = txtHistory.getText();
+
+      Patient patient = new Patient(id, name, age, history);
+      patients.add(patient);
+
+      display.append("ID: " + id +
+        " | Name: " + name +
+        " | Age: " + age +
+        " | History: " + history + "\n");
+
+      txtId.setText("");
+      txtName.setText("");
+      txtAge.setText("");
+      txtHistory.setText("");
+      });
+    
 
         btnBack.addActionListener(e -> {
             dispose();
         });
+        
+       
     }
 }
+
