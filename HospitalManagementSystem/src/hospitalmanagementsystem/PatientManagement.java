@@ -6,7 +6,7 @@ package hospitalmanagementsystem;
  */
 import javax.swing.*;
 import java.util.ArrayList;
-
+import javax.swing.DefaultListModel;
 /**
  *
  * @author admin
@@ -32,7 +32,8 @@ public class PatientManagement extends JFrame {
     JButton btnSearch;
     JButton btnBack;
 
-    JTextArea display;
+    DefaultListModel<String> patientListModel = new DefaultListModel<>();
+    JList<String> patientList = new JList<>(patientListModel);
 
     public PatientManagement() {
 
@@ -95,12 +96,9 @@ public class PatientManagement extends JFrame {
         btnSearch.setBounds(380, 250, 100, 35);
         add(btnSearch);
 
-        display = new JTextArea();
-        display.setEditable(false);
-
-        JScrollPane scrollPane = new JScrollPane(display);
-        scrollPane.setBounds(50, 310, 430, 150);
-        add(scrollPane);
+      JScrollPane scrollPane = new JScrollPane(patientList);
+      scrollPane.setBounds(50, 310, 430, 150);
+      add(scrollPane);
 
         btnBack = new JButton("Back");
         btnBack.setBounds(200, 490, 150, 35);
@@ -130,10 +128,12 @@ public class PatientManagement extends JFrame {
       Patient patient = new Patient(id, name, age, history);
       patients.add(patient);
 
-      display.append("ID: " + id +
-        " | Name: " + name +
-        " | Age: " + age +
-        " | History: " + history + "\n");
+     patientListModel.addElement(
+      "ID: " + id +
+      " | Name: " + name +
+      " | Age: " + age +
+      " | History: " + history
+     );
 
       txtId.setText("");
       txtName.setText("");
@@ -141,7 +141,91 @@ public class PatientManagement extends JFrame {
       txtHistory.setText("");
       });
     
+    
+    btnUpdate.addActionListener(e -> {
 
+    int index = patientList.getSelectedIndex();
+
+    if (index == -1) {
+        JOptionPane.showMessageDialog(this,
+            "Please select a patient from the list!",
+            "Update Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    Patient oldPatient = patients.get(index);
+
+    txtId.setText(String.valueOf(oldPatient.id));
+    txtName.setText(oldPatient.name);
+    txtAge.setText(String.valueOf(oldPatient.age));
+    txtHistory.setText(oldPatient.medicalHistory);
+
+    String newId = txtId.getText();
+    String newName = txtName.getText();
+    String newAge = txtAge.getText();
+    String newHistory = txtHistory.getText();
+
+    String idInput = JOptionPane.showInputDialog(this,
+        "Enter updated Patient ID:", newId);
+
+    if (idInput == null || idInput.trim().isEmpty()) {
+        return;
+    }
+
+    String nameInput = JOptionPane.showInputDialog(this,
+        "Enter updated Name:", newName);
+
+    if (nameInput == null || nameInput.trim().isEmpty()) {
+        return;
+    }
+
+    String ageInput = JOptionPane.showInputDialog(this,
+        "Enter updated Age:", newAge);
+
+    if (ageInput == null || ageInput.trim().isEmpty()) {
+        return;
+    }
+
+    String historyInput = JOptionPane.showInputDialog(this,
+        "Enter updated Medical History:", newHistory);
+
+    if (historyInput == null || historyInput.trim().isEmpty()) {
+        return;
+    }
+
+    try {
+        int id = Integer.parseInt(idInput);
+        int age = Integer.parseInt(ageInput);
+
+        Patient updatedPatient = new Patient(
+            id, nameInput, age, historyInput
+        );
+
+        patients.set(index, updatedPatient);
+
+        patientListModel.set(index,
+            "ID: " + id +
+            " | Name: " + nameInput +
+            " | Age: " + age +
+            " | History: " + historyInput
+        );
+
+        JOptionPane.showMessageDialog(this,
+            "Patient updated successfully!");
+
+        txtId.setText("");
+        txtName.setText("");
+        txtAge.setText("");
+        txtHistory.setText("");
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this,
+            "Patient ID and Age must be numbers!",
+            "Input Error",
+            JOptionPane.ERROR_MESSAGE);
+    }
+  });
         btnBack.addActionListener(e -> {
             dispose();
         });
