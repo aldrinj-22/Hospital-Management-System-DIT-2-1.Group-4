@@ -225,7 +225,35 @@ public class PatientManagement extends JFrame {
             "Input Error",
             JOptionPane.ERROR_MESSAGE);
     }
-  });
+        });
+    
+    
+    btnDelete.addActionListener(e -> {
+
+    int index = patientList.getSelectedIndex();
+
+    if (index == -1) {
+        JOptionPane.showMessageDialog(this,
+            "Please select a patient to delete!",
+            "Delete Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+        "Are you sure you want to delete this patient?",
+        "Confirm Delete",
+        JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+
+        patients.remove(index);
+        patientListModel.remove(index);
+
+        JOptionPane.showMessageDialog(this,
+            "Patient deleted successfully!");
+    }
+        });
         btnBack.addActionListener(e -> {
             dispose();
         });
